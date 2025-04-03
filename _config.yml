@@ -14,32 +14,32 @@ timezone:
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Chirpy # the main title
+title: PrimeZero # the main title
 
-tagline: A text-focused Jekyll theme # it will display as the subtitle
+tagline: Mohomed Azwar Mohomed Amaan # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
+  Hey there, welcome to my corner of the web! I'm Primezero, a cybersecurity enthusiast diving deep into the exciting world of ethical hacking and penetration testing. On this blog, you'll find my CTF write-ups from awesome platforms like TryHackMe and HackTheBox, along with cool cybersecurity projects, infosec tips, and all things hacking! Join me as I explore vulnerabilities, decode challenges, and have a blast while learning how to make the digital world safer and more secure.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
-url: ""
+url: "https://mrprimezero.github.io"
 
 github:
-  username: github_username # change to your GitHub username
+  username: mrprimezero # change to your GitHub username
 
 twitter:
-  username: twitter_username # change to your Twitter username
+  username: mrprimezero # change to your Twitter username
 
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: your_full_name
+  name: PrimeZero
   email: example@domain.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your Twitter homepage
-    - https://github.com/username # change to your GitHub homepage
+    - https://twitter.com/mrprimezero # change to your Twitter homepage
+    - https://github.com/mrprimezero # change to your GitHub homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
@@ -98,7 +98,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar:
+avatar: https://avatars.githubusercontent.com/u/116540094?v=4
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
