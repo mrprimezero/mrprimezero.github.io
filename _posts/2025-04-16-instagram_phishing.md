@@ -5,7 +5,7 @@ categories: [Social-Engineering, Phishing]
 tags: [apache, web-server, phishing, social-engineering, mysql]
 ---
 
-# The phishing Threat
+# The Phishing Threat
 Phishing is the most used tactic in a social-engineering attacks, one of the main reasons being `effectiveness`. No matter how advanced or how far is cyber security is gone, The most vulnerable system in this world will always be `Humans`. The main focus of a phishing attack is to create a sense of fear and urgency, which is why it is the most effective hacking method.
 
 ## Social Media as a Target: Why Instagram?
@@ -109,3 +109,74 @@ now let's start the apache server,
 sudo systemctl start apache2
 ```
 ### Ngrok
+And now let's use `ngrok` for port forwarding and host our site,
+```console
+ngrok http 80
+```
+Ngrok installation and set up can be found here: https://ngrok.com/downloads/
+
+# The Bait
+Now to set up our bait let's use the `email.html` and configure it to our liking. In this scenario we will be targetting Tony Stark. (I know crazy right).
+
+## E-Mail Template
+Let's edit our e-mail template to seem like Tony Stark is getting his account mass reported. (Instructions for what should be edited can be found in the HTML).
+
+The main thing we going to focus on is the login button, let's copy and paste in our `ngrok` link that we received so it redirects the victim to our site on click.
+
+### HTMail
+To use e-mail templates with outlook we can use a browser extension known as HTMaiL. `Note: I do not own or sponsor this extension, I just find it helpful`.
+![HTMaiL](/assets/img/posts/instagram-phishing/htmail.png)
+_HTMaiL: Webstore_
+
+After adding HTMaiL to your browser there should be a tab named messages when composing a new mail, there you should find a code block icon which then we can use to add our e-mail template.
+![HtMaiL Button](/assets/img/posts/instagram-phishing/htmailbtn.png)
+_HTMaiL: Button_
+
+After clicking the button we can add in our HTML, so simply just copy and paste in the edited HTML code and click insert.
+![Adding the HTML code](/assets/img/posts/instagram-phishing/emailtempadd.png)
+_Adding the HTML code_
+
+The final output should look something like this.
+![E-Mail Output](/assets/img/posts/instagram-phishing/email.png)
+_E-Mail Output_
+
+And since it's all done let's send out our E-Mail to Tony Stark.
+
+# Victims Perspective
+Now Tony Stark would have received an E-Mail saying that his Instgaram is being mass reported, so a panicked Tony Stark would then click on our link and be redirected to our site.
+
+This is what our site would look like to the Victim,
+![Fake Instagram Site](/assets/img/posts/instagram-phishing/instagram.png)
+_Fake Instagram Site_
+
+A panicked Tony Stark would then enter this credentials into our fake site,
+![Credentials](/assets/img/posts/instagram-phishing/tonyenters.png)
+_Credentials_
+
+After Tony Stark clicks `Log-In` he would be redirected to an Instagram help center page and everything would seem normal. 
+![Redirection](/assets/img/posts/instagram-phishing/redirected.png)
+_Redirection_
+
+# Captured Credentials
+Since Tony Stark has entered his credentials in our fake site we can check our MySQL shell for Tony Stark's credentials.
+```console
+SELECT * FROM logins;
+```
+This should let us see all the contents of the `logins` table.
+![Captured Credentials](/assets/img/posts/instagram-phishing/logins.png)
+_Captured Credentials_
+
+And just like that we now have access to Tony Stark's Instagram. Let's send Peter Parker a message saying "I hate you 3000".
+
+# Dangers of Phishing
+Phishing is a highly effective method of hacking even today in such a highly advanced civilization.
+
+Phishing is dengerous for the one implementing it and the victim alike, There could be various types of phishing which can take place for an example we have used Instagram but someone might hae a different idea and target an entire organization. Phishing is not only setting up fake sites and getting credentials of Instagram logins but it is also one of the most effective way malware can spread. For instance a hacker might contruct a ransomware which targets a company and an employee might unknowingly click the link to download that malware.
+
+Phishing is also harmful to the attacker since if caught we possibly might have to face jail time considering the severity.
+
+# Defense Machanism
+The only form of defense against fishing is to stay up-to-date and be informed about theses types of attacks and educate employess what phishing attacks are and how to spot and report them.
+
+
+Thank you for reading this post and don't forget to follow me on X and GitHub!
