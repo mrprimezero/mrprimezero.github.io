@@ -1,6 +1,6 @@
 ---
-title: Instagram Phishing 101: Understanding the Mechanics (and Defenses)
-date:2025-04-16 16:47:00 +0530
+title: "Instagram Phishing 101: Understanding the Mechanics (and Defenses)"
+date: 2025-04-16 16:47:00 +0530
 categories: [Social-Engineering, Phishing]
 tags: [apache, web-server, phishing, social-engineering, mysql]
 ---
