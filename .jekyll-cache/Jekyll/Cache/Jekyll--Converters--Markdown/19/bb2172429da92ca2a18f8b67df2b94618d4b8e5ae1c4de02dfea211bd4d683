@@ -1,0 +1,184 @@
+I"�><h1 id="the-phishing-threat">The Phishing Threat</h1>
+<p>Phishing is the most used tactic in a social-engineering attacks, one of the main reasons being <code class="language-plaintext highlighter-rouge">effectiveness</code>. No matter how advanced or how far is cyber security is gone, The most vulnerable system in this world will always be <code class="language-plaintext highlighter-rouge">Humans</code>. The main focus of a phishing attack is to create a sense of fear and urgency, which is why it is the most effective hacking method.</p>
+
+<h2 id="social-media-as-a-target-why-instagram">Social Media as a Target: Why Instagram?</h2>
+<p>Social media accounts contain the most valuable thing a hacker desires <code class="language-plaintext highlighter-rouge">Data</code>, Social accounts contain so much secrecy and privacy which a hacker could then use to blackmail a <code class="language-plaintext highlighter-rouge">victim</code> into demanding a ransom. And the victim would also pay the ransom due to their <code class="language-plaintext highlighter-rouge">fear</code>. In this post I will be demonstrating how to obtain Instagram credentials of a victim(with their consent), I have chosen Instagram due to it being the most used social platform among Gen-Z.</p>
+
+<h2 id="the-goal-of-this-post">The Goal of this Post</h2>
+<p>This post is published strictly for educational purposes only. I do not condone any Malicious or Illegal activity. The main focus is to teach how easily a phishing attack could occur and how we could possibly defend against it.</p>
+
+<h1 id="how-instagram-phishing-works">How Instagram Phishing works</h1>
+<p>Phishing is not something that is overly complicated it mostly plays with a persons emotions. So in order to achieve the outcome we desire we must make things look as authentuc as possible. In this demonstration we will be using a phishing page created by yours truly PrimeZero(ME).</p>
+
+<h2 id="instagram-phishing-repository">Instagram Phishing Repository</h2>
+<p>I have created an Instagram which is identical to the original with some modifications to have an edge on our attempt at <code class="language-plaintext highlighter-rouge">Phishing</code>. Let’s clone the GitHub repository.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">git clone https://github.com/mrprimezero/Instagram-Phishing-Page
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>This repository contains a webpage and an e-mail template which we can send out to the target.</p>
+
+<h1 id="setting-up-the-phishing-page">Setting up the Phishing Page</h1>
+<p>For our web server to work we will be using <code class="language-plaintext highlighter-rouge">apache</code>, <code class="language-plaintext highlighter-rouge">ngrok</code> and <code class="language-plaintext highlighter-rouge">mysql</code>. I recommend using Kali-Linux since we have everything we need there and also cause it’s cooler. So lets set them up now.</p>
+
+<h2 id="mysql">MySQL</h2>
+<p>We are going to set up MySQL and this will store our captured <code class="language-plaintext highlighter-rouge">username</code> and <code class="language-plaintext highlighter-rouge">password</code> in a database called capturelogin.</p>
+
+<p>Before we begin let’s check the status of MySQL in our system</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">sudo systemctl status mysql
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>This will let us know if MySQL services are active. If the status shows as disbaled, start services by issuing this command:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">sudo systemctl start mysql
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>And now let’s login to our MySQL service.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">sudo mysql -u root -p
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Enter in your root password here.</p>
+
+<h3 id="creating-the-database">Creating the Database</h3>
+<p>Now let’s create a Database name <code class="language-plaintext highlighter-rouge">capturelogin</code>. Note: You may name it anything as you desire.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">CREATE DATABASE capturelogin;</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>After creating the database let’s create a user and a password and grant that user privilges to the database,</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">CREATE USER 'logger'@'localhost' IDENTIFIED BY 'logmaster';</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">GRANT ALL PRIVILEGES ON capturelogin.* TO 'logger'@'localhost';</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>and now let’s flush privileges to keep the privilege information up-to-date,</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">FLUSH PRIVILEGES;</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Now we have to use that database we created to create a table to add our victim details.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">USE capturelogin;</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Now let’s create the table to record our login details.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="go">CREATE TABLE logins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+</span><span class="gp">);</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>And that’s all we have to do with MySQL, But don’t close the MySQL shell yet.</p>
+
+<h2 id="apache-server">Apache Server</h2>
+<p>Launch a new terminal instance and check whether Apache services are active,</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">sudo systemctl status apache2
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>if the services are active stop the services for now as you might run into problems,</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">sudo systemctl stop apache2
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>now you are gonna have to place the <code class="language-plaintext highlighter-rouge">index.html</code>, <code class="language-plaintext highlighter-rouge">style.css</code> and the <code class="language-plaintext highlighter-rouge">info.php</code> files in <code class="language-plaintext highlighter-rouge">/var/www/html</code></p>
+
+<h3 id="configuring-php-file">Configuring PHP File</h3>
+<p>And now for the most important part, we will be configuring the <code class="language-plaintext highlighter-rouge">info.php</code> so it can speak with our database.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="go">// Database credentials
+</span><span class="gp">$</span>servername <span class="o">=</span> <span class="s2">"localhost"</span><span class="p">;</span>
+<span class="gp">$</span>username <span class="o">=</span> <span class="s2">"logger"</span><span class="p">;</span>
+<span class="gp">$</span>password <span class="o">=</span> <span class="s2">"logmaster"</span><span class="p">;</span>
+<span class="gp">$</span>dbname <span class="o">=</span> <span class="s2">"capturelogin"</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>The only thing that needs to be done is change the database credentials and we are set.</p>
+
+<p>now let’s start the apache server,</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">sudo systemctl start apache2
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<h3 id="ngrok">Ngrok</h3>
+<p>And now let’s use <code class="language-plaintext highlighter-rouge">ngrok</code> for port forwarding and host our site,</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">ngrok http 80
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Ngrok installation and set up can be found here: https://ngrok.com/downloads/</p>
+
+<h1 id="the-bait">The Bait</h1>
+<p>Now to set up our bait let’s use the <code class="language-plaintext highlighter-rouge">email.html</code> and configure it to our liking. In this scenario we will be targetting Tony Stark. (I know crazy right).</p>
+
+<h2 id="e-mail-template">E-Mail Template</h2>
+<p>Let’s edit our e-mail template to seem like Tony Stark is getting his account mass reported. (Instructions for what should be edited can be found in the HTML).</p>
+
+<p>The main thing we going to focus on is the login button, let’s copy and paste in our <code class="language-plaintext highlighter-rouge">ngrok</code> link that we received so it redirects the victim to our site on click.</p>
+
+<h3 id="htmail">HTMail</h3>
+<p>To use e-mail templates with outlook we can use a browser extension known as HTMaiL. <code class="language-plaintext highlighter-rouge">Note: I do not own or sponsor this extension, I just find it helpful</code>.
+<img src="/assets/img/posts/instagram-phishing/htmail.png" alt="HTMaiL" />
+<em>HTMaiL: Webstore</em></p>
+
+<p>After adding HTMaiL to your browser there should be a tab named messages when composing a new mail, there you should find a code block icon which then we can use to add our e-mail template.
+<img src="/assets/img/posts/instagram-phishing/htmailbtn.png" alt="HtMaiL Button" />
+<em>HTMaiL: Button</em></p>
+
+<p>After clicking the button we can add in our HTML, so simply just copy and paste in the edited HTML code and click insert.
+<img src="/assets/img/posts/instagram-phishing/emailtempadd.png" alt="Adding the HTML code" />
+<em>Adding the HTML code</em></p>
+
+<p>The final output should look something like this.
+<img src="/assets/img/posts/instagram-phishing/email.png" alt="E-Mail Output" />
+<em>E-Mail Output</em></p>
+
+<p>And since it’s all done let’s send out our E-Mail to Tony Stark.</p>
+
+<h1 id="victims-perspective">Victims Perspective</h1>
+<p>Now Tony Stark would have received an E-Mail saying that his Instgaram is being mass reported, so a panicked Tony Stark would then click on our link and be redirected to our site.</p>
+
+<p>This is what our site would look like to the Victim,
+<img src="/assets/img/posts/instagram-phishing/instagram.png" alt="Fake Instagram Site" />
+<em>Fake Instagram Site</em></p>
+
+<p>A panicked Tony Stark would then enter this credentials into our fake site,
+<img src="/assets/img/posts/instagram-phishing/tonyenters.png" alt="Credentials" />
+<em>Credentials</em></p>
+
+<p>After Tony Stark clicks <code class="language-plaintext highlighter-rouge">Log-In</code> he would be redirected to an Instagram help center page and everything would seem normal. 
+<img src="/assets/img/posts/instagram-phishing/redirected.png" alt="Redirection" />
+<em>Redirection</em></p>
+
+<h1 id="captured-credentials">Captured Credentials</h1>
+<p>Since Tony Stark has entered his credentials in our fake site we can check our MySQL shell for Tony Stark’s credentials.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">SELECT * FROM logins;</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>This should let us see all the contents of the <code class="language-plaintext highlighter-rouge">logins</code> table.
+<img src="/assets/img/posts/instagram-phishing/logins.png" alt="Captured Credentials" />
+<em>Captured Credentials</em></p>
+
+<p>And just like that we now have access to Tony Stark’s Instagram. Let’s send Peter Parker a message saying “I hate you 3000”.</p>
+
+<h1 id="dangers-of-phishing">Dangers of Phishing</h1>
+<p>Phishing is a highly effective method of hacking even today in such a highly advanced civilization.</p>
+
+<p>Phishing is dengerous for the one implementing it and the victim alike, There could be various types of phishing which can take place for an example we have used Instagram but someone might hae a different idea and target an entire organization. Phishing is not only setting up fake sites and getting credentials of Instagram logins but it is also one of the most effective way malware can spread. For instance a hacker might contruct a ransomware which targets a company and an employee might unknowingly click the link to download that malware.</p>
+
+<p>Phishing is also harmful to the attacker since if caught we possibly might have to face jail time considering the severity.</p>
+
+<h1 id="defense-machanism">Defense Machanism</h1>
+<p>The only form of defense against fishing is to stay up-to-date and be informed about theses types of attacks and educate employess what phishing attacks are and how to spot and report them.</p>
+
+<p>Thank you for reading this post and don’t forget to follow me on X and GitHub!</p>
+:ET

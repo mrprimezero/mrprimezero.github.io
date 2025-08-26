@@ -1,0 +1,141 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://localhost:4000/</id>
+  <title>PrimeZero</title>
+  <subtitle>Hey there, welcome to my corner of the web! I'm Primezero, a cybersecurity enthusiast diving deep into the exciting world of ethical hacking and penetration testing. On this blog, you'll find my CTF write-ups from awesome platforms like TryHackMe and HackTheBox, along with cool cybersecurity projects, infosec tips, and all things hacking! Join me as I explore vulnerabilities, decode challenges, and have a blast while learning how to make the digital world safer and more secure.</subtitle>
+  <updated>2025-08-26T21:03:54+05:30</updated>
+  <author>
+    <name>PrimeZero</name>
+    <uri>http://localhost:4000/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="http://localhost:4000/"/>
+  <generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator>
+  <rights> © 2025 PrimeZero </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>Home Lab: DHCP server</title>
+    <link href="http://localhost:4000/posts/homelab_dhcp/" rel="alternate" type="text/html" title="Home Lab: DHCP server" />
+    <published>2025-08-25T00:00:00+05:30</published>
+  
+    <updated>2025-08-25T00:00:00+05:30</updated>
+  
+    <id>http://localhost:4000/posts/homelab_dhcp/</id>
+    <content type="text/html" src="http://localhost:4000/posts/homelab_dhcp/" />
+    <author>
+      <name>PrimeZero</name>
+    </author>
+
+  
+    
+    <category term="Home Lab" />
+    
+    <category term="Installations" />
+    
+  
+
+  <summary>dnsmasq
+
+Welcome back to the second installment of our cybersecurity home lab series! In our previous post, we established our attacker machine, Kali Linux, and prepared it for action. Now, we’re taking a critical step forward by building the perfect environment for it to operate in: a dedicated, isolated network.
+
+Why is this so crucial? Because it allows us to simulate real-world scenarios wi...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>Home Lab: Kali Linux installation (Attacker Machine)</title>
+    <link href="http://localhost:4000/posts/homelab_kalilinux/" rel="alternate" type="text/html" title="Home Lab: Kali Linux installation (Attacker Machine)" />
+    <published>2025-08-17T00:00:00+05:30</published>
+  
+    <updated>2025-08-17T00:00:00+05:30</updated>
+  
+    <id>http://localhost:4000/posts/homelab_kalilinux/</id>
+    <content type="text/html" src="http://localhost:4000/posts/homelab_kalilinux/" />
+    <author>
+      <name>PrimeZero</name>
+    </author>
+
+  
+    
+    <category term="Home Lab" />
+    
+    <category term="Installations" />
+    
+  
+
+  <summary>Kali Linx
+
+Introduction
+Welcome to the first installment of our cybersecurity home lab series! Whether you’re a student, a security enthusiast, or a professional looking to hone your skills, having a personal lab is crucial. It’s a safe, legal environment to practice ethical hacking, test security tools, and understand how systems are vulnerable to attack.
+
+In this first post, we’re going to bu...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>HackTheBox: Code</title>
+    <link href="http://localhost:4000/posts/code_htb_writeup/" rel="alternate" type="text/html" title="HackTheBox: Code" />
+    <published>2025-04-26T09:03:00+05:30</published>
+  
+    <updated>2025-04-26T09:03:00+05:30</updated>
+  
+    <id>http://localhost:4000/posts/code_htb_writeup/</id>
+    <content type="text/html" src="http://localhost:4000/posts/code_htb_writeup/" />
+    <author>
+      <name>PrimeZero</name>
+    </author>
+
+  
+    
+    <category term="HackTheBox" />
+    
+    <category term="Easy" />
+    
+  
+
+  <summary>Room Card
+
+TL;DR: The HackTheBox machine Code was compromised starting with a web application vulnerability on port 5000, followed by a Python sandbox bypass for environment enumeration. Privilege escalation to root was achieved by exploiting a backup script (backy.sh) controlled by task.json. While path traversal and symbolic link attempts failed, removing the exclusion rule in task.json allow...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>Instagram Phishing 101: Understanding the Mechanics (and Defenses)</title>
+    <link href="http://localhost:4000/posts/instagram_phishing/" rel="alternate" type="text/html" title="Instagram Phishing 101: Understanding the Mechanics (and Defenses)" />
+    <published>2025-04-16T16:47:00+05:30</published>
+  
+    <updated>2025-04-17T09:10:14+05:30</updated>
+  
+    <id>http://localhost:4000/posts/instagram_phishing/</id>
+    <content type="text/html" src="http://localhost:4000/posts/instagram_phishing/" />
+    <author>
+      <name>PrimeZero</name>
+    </author>
+
+  
+    
+    <category term="Social-Engineering" />
+    
+    <category term="Phishing" />
+    
+  
+
+  <summary>The Phishing Threat
+Phishing is the most used tactic in a social-engineering attacks, one of the main reasons being effectiveness. No matter how advanced or how far is cyber security is gone, The most vulnerable system in this world will always be Humans. The main focus of a phishing attack is to create a sense of fear and urgency, which is why it is the most effective hacking method.
+
+Social M...</summary>
+
+  </entry>
+
+</feed>
+
+

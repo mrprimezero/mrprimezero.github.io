@@ -1,0 +1,205 @@
+I"�7<p><img src="/assets/img/posts/htb-code/Code.png" alt="roomcard" />
+<em>Room Card</em></p>
+
+<p>TL;DR: The HackTheBox machine <code class="language-plaintext highlighter-rouge">Code</code> was compromised starting with a web application vulnerability on port 5000, followed by a <code class="language-plaintext highlighter-rouge">Python sandbox bypass</code> for environment enumeration. Privilege escalation to root was achieved by exploiting a backup script <code class="language-plaintext highlighter-rouge">(backy.sh)</code> controlled by <code class="language-plaintext highlighter-rouge">task.json</code>. While path traversal and symbolic link attempts failed, removing the exclusion rule in <code class="language-plaintext highlighter-rouge">task.json</code> allowed backing up and retrieving the root flag from /root/.</p>
+
+<h2 id="initial-enumeration">Initial Enumeration</h2>
+<p>Let’s start off by running a simple <code class="language-plaintext highlighter-rouge">nmap</code> command to check for open ports.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">sudo nmap -sC -sV 10.10.11.62
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>After running <code class="language-plaintext highlighter-rouge">nmap</code> we find that port 22 for ssh and port 5000 is open for HTTP server called <code class="language-plaintext highlighter-rouge">gunicorn</code>.
+<img src="/assets/img/posts/htb-code/nmap.png" alt="Nmap Scan" />
+<em>Nmap Scan</em></p>
+
+<p>After a Search on Google we find that <code class="language-plaintext highlighter-rouge">Gunicorn</code> or <code class="language-plaintext highlighter-rouge">Green Unicorn</code> is a python WSGI HTTP server for UNIX.</p>
+
+<p>Let’s try accessing the http server on port 5000.
+<img src="/assets/img/posts/htb-code/pythonweb.png" alt="Web Page" />
+<em>Web Page</em></p>
+
+<h3 id="reverse-shell">Reverse Shell</h3>
+<p>It appears that the page is a python code editor, Let’s try to get a reverse shell to this server via the editor.
+<img src="/assets/img/posts/htb-code/pythonrevtry.png" alt="Reverse Shell" />
+<em>Reverse Shell</em></p>
+
+<p>Well that didn’t work. Seems like the editor is retricting certain keywords. We see the same thing happening when trying <code class="language-plaintext highlighter-rouge">eval()</code> and <code class="language-plaintext highlighter-rouge">exec()</code> which are built-in functions that allow for the dynamic execution of Python code from strings.</p>
+
+<h3 id="global-resources">Global Resources</h3>
+<p>Since most of the keywords are restricted let’s try to access the dictionary of all global names available within the sandbox’s execution environment using <code class="language-plaintext highlighter-rouge">raise</code></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">raise Exception(globals())
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/assets/img/posts/htb-code/pythonglobals.png" alt="Global Names" />
+<em>Global Names</em></p>
+
+<p>Finally we got something. Let’s take a closer look at it via our browser’s Inspect tab.
+<img src="/assets/img/posts/htb-code/globalscontent.png" alt="Global Names Inspect" />
+<em>Global Names Inspect</em></p>
+
+<p>Ah yes! Upon closer inspection we find that the Flask app is using SQLAlchemy for database interaction and we find that there is a class representing the users table in the database called <code class="language-plaintext highlighter-rouge">User</code>.</p>
+
+<h3 id="users-and-passwords">Users and Passwords</h3>
+<p>And now with that let’s try to access the users table in the database. First let’s check for all usernames.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">raise Exception(User.query.with_entities(User.id, User.username).all())
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/assets/img/posts/htb-code/globalusername.png" alt="Usernames" />
+<em>Usernames</em></p>
+
+<p>So we get to know that there are 2 users called <code class="language-plaintext highlighter-rouge">development</code> and the user <code class="language-plaintext highlighter-rouge">martin</code>.</p>
+
+<p>Let’s try to access these user’s passwords.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">raise Exception(User.query.with_entities(User.id, User.password).all())
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/assets/img/posts/htb-code/globalpwdhash.png" alt="Password Hashes" />
+<em>Passwords Hashes</em></p>
+
+<p>It appears that the passwords MD5 hashes, Let’s crack it.</p>
+
+<h3 id="passwords-cracking">Passwords Cracking</h3>
+<p>To crack the passwords we will be using an online tool called CrackStation and since it’s MD5 hashes it won’t be that hard to crack.</p>
+
+<p>Let’s crack the pasword for the user <code class="language-plaintext highlighter-rouge">development</code>
+<img src="/assets/img/posts/htb-code/devhashcrack.png" alt="Development Password" />
+<em>Development Password</em></p>
+
+<p>Well that’s interesting.. Upon cracking we find that the password for the user <code class="language-plaintext highlighter-rouge">development</code> is just “development”.</p>
+
+<p>Let’s try to crack the password for the user <code class="language-plaintext highlighter-rouge">martin</code>.
+<img src="/assets/img/posts/htb-code/martinhashcrack.png" alt="Martin Password" />
+<em>Martin Password</em></p>
+
+<p>Okay so this time we got a different password for the user <code class="language-plaintext highlighter-rouge">martin</code>.. The password for the user <code class="language-plaintext highlighter-rouge">martin</code> is “nafeelswordsmaster”.</p>
+
+<h2 id="ssh">SSH</h2>
+<p>Since we have usernames and passwords let’s try to SSH into the server.</p>
+
+<h3 id="ssh-as-development">SSH as development</h3>
+<p><img src="/assets/img/posts/htb-code/sshdev.png" alt="SSH as development" />
+<em>SSH as development</em></p>
+
+<p>It appears that the password for the user <code class="language-plaintext highlighter-rouge">development</code> is incorrect. Let’s see if we have any luck as <code class="language-plaintext highlighter-rouge">martin</code>.</p>
+
+<h3 id="ssh-as-martin">SSH as martin</h3>
+<p><img src="/assets/img/posts/htb-code/sshmartin.png" alt="SSH as martin" />
+<em>SSH as martin</em></p>
+
+<p><img src="/assets/img/posts/htb-code/sshmartinsuccess.png" alt="Gained Access to the Server" />
+<em>Gained Access to the Server</em></p>
+
+<p>Yes! We finally get access to the server as <code class="language-plaintext highlighter-rouge">martin</code>.</p>
+
+<p>So no we can check for sudo privileges of <code class="language-plaintext highlighter-rouge">martin</code>.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">sudo -l
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/assets/img/posts/htb-code/martinperm.png" alt="martin sudo permissions" />
+<em>martin sudo permissions</em></p>
+
+<p>As martin we find that we are allowed to run <code class="language-plaintext highlighter-rouge">backy.sh</code> with sudo with no password.</p>
+
+<h2 id="backup-script">Backup Script</h2>
+<p>Let’s try to run the script and check it’s output.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">sudo /usr/bin/backy.sh
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="/assets/img/posts/htb-code/backysh.png" alt="Backup Script" />
+<em>Backup Script</em></p>
+
+<p>Upon running the script we are asked to use <code class="language-plaintext highlighter-rouge">task.json</code> with this script.</p>
+
+<h3 id="taskjson">task.json</h3>
+<p>Since we are asked to use this json file let’s locate where this file could be.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="gp">find / -name "task.json" 2&gt;</span>dev&amp;&amp;null
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="/assets/img/posts/htb-code/findtaskjson.png" alt="Finding task.json" />
+<em>Finding task.json</em></p>
+
+<p>Now that we have the location of the file let’s check for it’s contents.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">cat task.json
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="/assets/img/posts/htb-code/jsoncontents.png" alt="cat json contents" />
+<em>cat json contents</em></p>
+
+<p>It appears that this file can be used to specify which folders should be archived using the <code class="language-plaintext highlighter-rouge">backy.sh</code> script.</p>
+
+<h2 id="user-flag">User Flag</h2>
+<p>After running the script normally we find nothing. So let’s try to modify the json file and get all the contents of <code class="language-plaintext highlighter-rouge">app-production</code> folder, Maybe then we could find something.</p>
+
+<p><img src="/assets/img/posts/htb-code/appprod.png" alt="app-production archiving" />
+<em>app-production archiving</em></p>
+
+<p>After successfully archiving let’s un-pack it’s contents.</p>
+
+<p><img src="/assets/img/posts/htb-code/appfile.png" alt="app-production archive" />
+<em>app-production archive</em></p>
+
+<p><img src="/assets/img/posts/htb-code/unpackapp.png" alt="app-production unpacking" />
+<em>app-production unpacking</em></p>
+
+<p>Yes! We finally get to see the user.txt file. Let’s get the flag.
+<img src="/assets/img/posts/htb-code/userflag.png" alt="User Flag" />
+<em>User Flag</em></p>
+
+<p>Now let’s move on to find the root flag.</p>
+
+<h2 id="root-flag">Root Flag</h2>
+<p>After trying to archive the <code class="language-plaintext highlighter-rouge">/root</code> folder alone we are prompted that the script only has permissions to archive the <code class="language-plaintext highlighter-rouge">/home</code> folder and <code class="language-plaintext highlighter-rouge">/var</code> folder.</p>
+
+<p>For this let’s perform path traversal with <code class="language-plaintext highlighter-rouge">/....//</code> and check if that would work.
+<img src="/assets/img/posts/htb-code/tryingroot.png" alt="Path Traversal" />
+<em>Path Traversal</em></p>
+
+<p><img src="/assets/img/posts/htb-code/corruptarchive.png" alt="Root Archiving" />
+<em>Root Archiving</em></p>
+
+<p>Let’s check the root archive now.
+<img src="/assets/img/posts/htb-code/noroot.png" alt="Root Archiving" />
+<em>Root Archiving</em></p>
+
+<p><img src="/assets/img/posts/htb-code/noroot1.png" alt="Root Archive Unpack" />
+<em>Root Archive Unpack</em></p>
+
+<p>Even though we tried archiving and unpacking it’s contents we find that the archive is empty.</p>
+
+<p>Let’s try to analyze why this is happening and possible fixes.</p>
+
+<p>We tried creating rootlinks and then archiving the folders and still even though that method archives the root folder, We do not have permissions to open the rootlink folder. So let’s try to analyze the <code class="language-plaintext highlighter-rouge">task.json</code> file and check if there are any work arounds.</p>
+
+<p>After some analysis we find that the exclude section is restricting strings with <code class="language-plaintext highlighter-rouge">.</code> so basically whenever we enter a period it gets removed. So let’s remove that section and try again.</p>
+
+<p><img src="/assets/img/posts/htb-code/jsonmod.png" alt="Root Archiving Re-try" />
+<em>Root Archiving Re-try</em></p>
+
+<p>And now the folder is archived let’s unpack it’s contents.
+<img src="/assets/img/posts/htb-code/unpackroot.png" alt="Unpacking Root" />
+<em>Unpacking Root</em></p>
+
+<p>Finally we get to see the root.txt file. Let’s get the flag.
+<img src="/assets/img/posts/htb-code/rootflag.png" alt="Root Flag" />
+<em>Root Flag</em></p>
+
+<p>The machine <code class="language-plaintext highlighter-rouge">Code</code> was fun and riddled with puzzles and I honestly enjoyed playing this machine which took me about 5 hours to break.</p>
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+<ul>
+  <li><strong>Web Application Vulnerabilities as Entry Points:</strong> Initial access often stems from flaws in web applications.</li>
+  <li><strong>Python Sandbox Introspection:</strong> Tools and techniques exist to examine the internals of sandboxed Python environments.</li>
+  <li><strong>Backup Scripts &amp; Root Privileges:</strong> Scripts running with elevated privileges (like root) are critical targets for privilege escalation.</li>
+  <li><strong>Configuration File Security:</strong> Configuration files can contain sensitive settings and exploitable parameters.</li>
+  <li><strong>Importance of Exclusion Rules:</strong> Seemingly minor configuration details, such as exclusion rules in backup processes, can have significant security implications.</li>
+</ul>
+:ET

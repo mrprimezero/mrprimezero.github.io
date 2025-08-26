@@ -1,0 +1,122 @@
+I"�<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/dnsmasq.jpg" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p>Welcome back to the second installment of our cybersecurity home lab series! In our <a href="https://mrprimezero.github.io/posts/homelab_kalilinux/">previous post</a>, we established our attacker machine, Kali Linux, and prepared it for action. Now, we’re taking a critical step forward by building the perfect environment for it to operate in: a dedicated, isolated network.</p>
+
+<p>Why is this so crucial? Because it allows us to simulate real-world scenarios without any risk to your home network. Instead of a messy, multi-VM configuration, we’ll create a single, centralized server to handle all of our networking needs. In this guide, we’ll leverage the lightweight and secure Alpine Linux to serve as our DHCP (Dynamic Host Configuration Protocol) and DNS (Domain System Name) server, using the powerful <code class="language-plaintext highlighter-rouge">dnsmasq</code> utility. This will give all our virtual machines their own private address space, just like in a real enterprise network.</p>
+
+<h2 id="installation">Installation</h2>
+<p>Before we create our DHCP server we will have to download a light weight linux distribution which doesn’t take up much power so we can have it running while we run our other Virtual Machines, I have picked Alpine Linux since it has a command line interface and doesn’t take up much space and power. You may use any Linux distrobution that you desire.</p>
+
+<h3 id="downloadables">Downloadables</h3>
+<p>To get started you will need atleast 3GB free storage space and 512MB free RAM. Also you will have to download: <a href="https://www.virtualbox.org/wiki/Downloads">Oracle VirtualBox</a> and you need to download Alpine Linux standard ISO <a href="https://alpinelinux.org/downloads/">here</a>, make sure to install the x86_64 version of the standard ISO.</p>
+
+<h3 id="virtual-machine-creation">Virtual Machine creation</h3>
+<p>Once you have downloaded everything go on to virtualbox and click on <code class="language-plaintext highlighter-rouge">new</code> to create a new virtual machine.
+<img src="/assets/img/posts/homelab/dnsmasq_dhcp/1.png" alt="New VM" />
+<em>New VM</em></p>
+
+<p>Once you do that you will this screen, So now give your machine a name and select a location on a drive with atleast 3GB free space. THen click on ISO image and select your downloaded <a href="https://alpinelinux.org/downloads/">Alpine Linux Standard ISO</a>. Set the Type to <code class="language-plaintext highlighter-rouge">Linux</code>, Subtype to <code class="language-plaintext highlighter-rouge">Other Linux</code> and the version as <code class="language-plaintext highlighter-rouge">Other Linux (64 bit)</code>.
+<img src="/assets/img/posts/homelab/dnsmasq_dhcp/2.png" alt="Name and operating system" />
+<em>Name and operating system</em></p>
+
+<p>Now move to the Hardware section and select 512MB base memory and 1 CPU processor.
+<img src="/assets/img/posts/homelab/dnsmasq_dhcp/3.png" alt="VM Hardware" />
+<em>VM Hardware</em></p>
+
+<p>Now move on to the Hard disk section and select “Create a Virtual Hard Disk Now” and give it atleast 2GB storage space. Now once everything is done click <code class="language-plaintext highlighter-rouge">Finish</code>.
+<img src="/assets/img/posts/homelab/dnsmasq_dhcp/4.png" alt="VM Storage" />
+<em>VM Storage</em></p>
+
+<h3 id="os-installation">OS Installation</h3>
+<p>Once the VM creation is done click on start and boot into Alpine Linux. Once in you will have to install the OS, to install type this in the terminal.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="go">setup-alpine
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/5.png" alt="Alpine setup" />
+<em>Alpine setup</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/6.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/7.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/8.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/9.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/10.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/11.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/12.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/13.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/14.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/16.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/19.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/20.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/21.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/22.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/23.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/24.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/25.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/26.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/27.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/28.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/29.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/30.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/31.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/32.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/33.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/34.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/35.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+
+<p><img src="/assets/img/posts/homelab/dnsmasq_dhcp/36.png" alt="dnsmasq" />
+<em>dnsmasq</em></p>
+:ET
