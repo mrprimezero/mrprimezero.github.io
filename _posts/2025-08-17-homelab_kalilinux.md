@@ -98,7 +98,9 @@ Once you are in the network tab click on attached to and select internal network
 ![Internal network](/assets/img/posts/homelab/kali_install/internalnetwork.png)
 _Internal network_
 
-Now give your network a name of your choice so we can use this to connect our other machines and click OK
+Now give your network a name of your choice or if you already have one chose that.
+
+**IMPORTANT NOTE:** Once you isolate your machine virtualbox by default does not provide it with an IP address since it is a completely isolated network there is no DHCP server for your machine to recieve an IP address. So you will have to assign an IP manually in the OS, or you could create your own DHCP server in this network like I did [here](https://mrprimezero.github.io/posts/homelab_dhcp/).
 
 ![Internal-network](/assets/img/posts/homelab/kali_install/socnet.png)
 _Internal Network_

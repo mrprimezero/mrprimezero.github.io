@@ -1,23 +1,21 @@
-
-
 {
-  "name": "PrimeZero",
-  "short_name": "PrimeZero",
-  "description": "Hey there, welcome to my corner of the web! I'm Primezero, a cybersecurity enthusiast diving deep into the exciting world of ethical hacking and penetration testing. On this blog, you'll find my CTF write-ups from awesome platforms like TryHackMe and HackTheBox, along with cool cybersecurity projects, infosec tips, and all things hacking! Join me as I explore vulnerabilities, decode challenges, and have a blast while learning how to make the digital world safer and more secure.",
+  "name": "MyWebSite",
+  "short_name": "MySite",
   "icons": [
     {
-      "src": "/assets/img/favicons/android-chrome-192x192.png",
+      "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
-      "src": "/assets/img/favicons/android-chrome-512x512.png",
+      "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
-    }],
-  "start_url": "/index.html",
-  "theme_color": "#2a1e6b",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "fullscreen"
+  "display": "standalone"
 }
-
