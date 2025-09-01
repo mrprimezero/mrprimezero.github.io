@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>PrimeZero</title>
   <subtitle>Hey there, welcome to my corner of the web! I'm Primezero, a cybersecurity enthusiast diving deep into the exciting world of ethical hacking and penetration testing. On this blog, you'll find my CTF write-ups from awesome platforms like TryHackMe and HackTheBox, along with cool cybersecurity projects, infosec tips, and all things hacking! Join me as I explore vulnerabilities, decode challenges, and have a blast while learning how to make the digital world safer and more secure.</subtitle>
-  <updated>2025-08-29T19:55:44+05:30</updated>
+  <updated>2025-09-01T12:57:49+05:30</updated>
   <author>
     <name>PrimeZero</name>
     <uri>http://localhost:4000/</uri>
@@ -17,6 +17,36 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Home Lab: Metasploitable installation (Vulnerable Machine)</title>
+    <link href="http://localhost:4000/posts/homelab_metasploitable_install/" rel="alternate" type="text/html" title="Home Lab: Metasploitable installation (Vulnerable Machine)" />
+    <published>2025-09-01T00:00:00+05:30</published>
+  
+    <updated>2025-09-01T00:00:00+05:30</updated>
+  
+    <id>http://localhost:4000/posts/homelab_metasploitable_install/</id>
+    <content type="text/html" src="http://localhost:4000/posts/homelab_metasploitable_install/" />
+    <author>
+      <name>PrimeZero</name>
+    </author>
+
+  
+    
+    <category term="Home Lab" />
+    
+    <category term="Installations" />
+    
+  
+
+  <summary>metasploitable
+
+Welcome back to the third installment of our cybersecurity home lab series! In our previous posts we’ve successfully installed our attacker machine and built a dedicated network with a DHCP server. Now we are ready to introduce the star of the show: our first vulnerable target.
+
+In this guide we will walk through the process of setting up Metasploitable 2, an intentionally vulne...</summary>
+
+  </entry>
 
   
   <entry>
@@ -54,7 +84,7 @@ Why is this so crucial? Because it allows us to simulate real-world scenarios wi
     <link href="http://localhost:4000/posts/homelab_kalilinux/" rel="alternate" type="text/html" title="Home Lab: Kali Linux installation (Attacker Machine)" />
     <published>2025-08-17T00:00:00+05:30</published>
   
-    <updated>2025-08-17T00:00:00+05:30</updated>
+    <updated>2025-08-29T19:58:07+05:30</updated>
   
     <id>http://localhost:4000/posts/homelab_kalilinux/</id>
     <content type="text/html" src="http://localhost:4000/posts/homelab_kalilinux/" />
